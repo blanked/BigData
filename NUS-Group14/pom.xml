@@ -29,6 +29,21 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
+    <dependency>
+      <groupId>ml.sparkling</groupId>
+      <artifactId>sparkling-graph-loaders</artifactId>
+      <version>0.0.7</version>
+    </dependency>
+    <dependency>
+      <groupId>ml.sparkling</groupId>
+      <artifactId>sparkling-graph-examples</artifactId>
+      <version>0.0.7</version>
+    </dependency>
+    <dependency>
+      <groupId>ml.sparkling</groupId>
+      <artifactId>sparkling-graph-operators</artifactId>
+      <version>0.0.7</version>
+    </dependency>
 
     <!-- Test -->
     <dependency>
