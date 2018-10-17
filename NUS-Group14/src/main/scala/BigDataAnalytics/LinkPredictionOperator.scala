@@ -27,7 +27,10 @@ import org.apache.spark.graphx._
 import ml.sparkling.graph.api.operators.measures.{EdgeMeasure, VertexMeasureConfiguration}
 //import ml.sparkling.graph.api.operators.measures._
 
-// Below are the nested imports by EdgeMeasure
+// Added for partitioning
+import ml.sparkling.graph.operators.partitioning.CommunityBasedPartitioning
+import ml.sparkling.graph.operators.algorithms.community.pscan.PSCAN
+
 
 
 object LinkPredictionOperator {
@@ -56,7 +59,10 @@ object LinkPredictionOperator {
 //    predictedEdges.saveAsTextFile("file://" + directory + "output")
     
     // Below is working..its only edgemeasure that is giving the exception
-    val centralityGraph: Graph[Double, _] = graph.closenessCentrality()
+//    val centralityGraph: Graph[Double, _] = graph.closenessCentrality()
+    
+//    val communityDetectionMethod=PSCAN
+//    val partitionedGraph1 =  CommunityBasedPartitioning.partitionGraphBy(graph,communityDetectionMethod)
     
     
     
