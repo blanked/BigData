@@ -3,7 +3,7 @@ target/*
 *.iml
 project/*
 data/*
-.settings/*
+NUS-Group14/.settings/*
 /data/flickr-growth.txt.gz
 /data/flickr-full.csv
 /data/flickr-growth-sorted.txt
