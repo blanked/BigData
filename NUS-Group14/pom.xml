@@ -128,7 +128,7 @@
 		            <manifest>
 		                <addClasspath>true</addClasspath>
 		                <classpathPrefix>lib/</classpathPrefix>
-		                <mainClass>theMainClass</mainClass>
+		                <mainClass>BigDataAnalytics.LinkPredictionOperator</mainClass>
 		            </manifest>
 		        </archive>
 		    </configuration>
