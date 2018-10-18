@@ -44,23 +44,22 @@ object LinkPredictionOperator {
     val spark = SparkSession
       .builder()
       .getOrCreate()
-    
-    
-    val directory = "/media/vboxshared/2018Sem1/BigData/data/"
+    val fs = "gs://"
+    val directory = "dataproc-753f5751-93fe-4649-89ef-cb7a4c923bc1-asia-southeast1/"
     val fileName = "flickr-full.csv"
 //    val fileName = "flickr-nodate.csv"
 //    val fileName = "small_nodate.csv"
     
-    val filePath = "file://" + directory + fileName
+    val filePath =  fs + directory + fileName
 //    implicit sc:SparkContext => spark.sparkContext
     implicit val sc = spark.sparkContext
-    val graph:Graph[Int, Int] = LoadGraph.from(CSV(filePath)).load()
+    val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
     
     val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 10, false)
 //    val predictedEdges: RDD[(VertexId, VertexId)] = graph.predictLinks(edgeMeasure=CommonNeighbours,threshold=10, treatAsUndirected=false)
     
     println("Size of RDD: " + predictedEdges.count())
-    predictedEdges.saveAsTextFile("file://" + directory + "output")
+    predictedEdges.saveAsTextFile(fs + directory + "output")
     
     
     
