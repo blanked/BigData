@@ -24,6 +24,7 @@ import ml.sparkling.graph.operators.OperatorsDSL
 import ml.sparkling.graph.operators.OperatorsDSL._
 import org.apache.spark.graphx.{VertexId, Graph}
 import org.apache.spark.graphx._
+import ml.sparkling.graph.operators.algorithms.link.BasicLinkPredictor
 import ml.sparkling.graph.api.operators.measures.{EdgeMeasure, VertexMeasureConfiguration}
 //import ml.sparkling.graph.api.operators.measures._
 
@@ -46,23 +47,21 @@ object LinkPredictionOperator {
     
     
     val directory = "/media/vboxshared/2018Sem1/BigData/data/"
-//    val fileName = "flickr-full.csv"
+    val fileName = "flickr-full.csv"
 //    val fileName = "flickr-nodate.csv"
-    val fileName = "small_nodate.csv"
+//    val fileName = "small_nodate.csv"
     
     val filePath = "file://" + directory + fileName
-    implicit sc:SparkContext => spark.sparkContext
+//    implicit sc:SparkContext => spark.sparkContext
+    implicit val sc = spark.sparkContext
     val graph:Graph[Int, Int] = LoadGraph.from(CSV(filePath)).load()
     
-//    val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 10, false)
-    val predictedEdges: RDD[(VertexId, VertexId)] = graph.predictLinks(edgeMeasure=CommonNeighbours,threshold=2, treatAsUndirected=false)
-//    predictedEdges.saveAsTextFile("file://" + directory + "output")
+    val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 10, false)
+//    val predictedEdges: RDD[(VertexId, VertexId)] = graph.predictLinks(edgeMeasure=CommonNeighbours,threshold=10, treatAsUndirected=false)
     
-    // Below is working..its only edgemeasure that is giving the exception
-//    val centralityGraph: Graph[Double, _] = graph.closenessCentrality()
+    println("Size of RDD: " + predictedEdges.count())
+    predictedEdges.saveAsTextFile("file://" + directory + "output")
     
-//    val communityDetectionMethod=PSCAN
-//    val partitionedGraph1 =  CommunityBasedPartitioning.partitionGraphBy(graph,communityDetectionMethod)
     
     
     
