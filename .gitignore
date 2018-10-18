@@ -2,3 +2,7 @@
 target/*
 *.iml
 project/*
+/data/flickr-growth.txt.gz
+/data/flickr-full.csv
+/data/flickr-growth-sorted.txt
+/data/flickr*
