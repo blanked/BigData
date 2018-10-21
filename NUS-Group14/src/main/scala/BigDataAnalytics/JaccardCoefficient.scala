@@ -15,7 +15,9 @@ import scala.reflect.ClassTag
 object JaccardCoefficient extends EdgeMeasure[Double,NeighbourSet]{
 
   def computeValue(srcAttr:NeighbourSet,dstAttr:NeighbourSet,treatAsUndirected:Boolean=false): Double ={
-    intersetSize(srcAttr, dstAttr) / unionSize(srcAttr,dstAttr)
+    val unionsize:Int = unionSize(srcAttr, dstAttr)
+    //println(unionsize)
+    if (unionsize == 0) 0 else intersetSize(srcAttr, dstAttr) / unionsize
   }
 
 
