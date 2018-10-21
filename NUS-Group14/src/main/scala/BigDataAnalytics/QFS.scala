@@ -82,11 +82,16 @@ object QFS {
       .builder()
       .getOrCreate()
 
-    val fs = "file://"
-    val directory = "/home/j/BigData/data/"
-    val fileName = "easy_test.csv"
-    val fileToWriteTo = "result.txt"
+//    val fs = "file://"
+//    val directory = "/home/j/BigData/data/"
 
+
+    val fs = "gs://"
+    val directory = "dataproc-753f5751-93fe-4649-89ef-cb7a4c923bc1-asia-southeast1/"
+
+    //        val fileName = "easy_test.csv"
+    val fileName = "twitter_nodate.csv"
+    val rootID: VertexId = 1
     // create edge RDD of type RDD[(VertexId, VertexId)]
 
     val file = spark.sparkContext.textFile(fs + directory + fileName,24)
@@ -96,12 +101,12 @@ object QFS {
 
     // create a graph
     val graph = Graph.fromEdgeTuples(edgesRDD, (Int.MaxValue, 0))
-    val rootID: VertexId = 1
+
     val QFSgraph :Graph[(Int, Int), Int]  = doQFS(graph,  rootID)
     // you can see your graph
-    println("Original data")
-    QFSgraph.vertices.collect().foreach(println)
-    println("New data")
+//    println("Original data")
+//    QFSgraph.vertices.collect().foreach(println)
+//    println("New data")
 //    val mostConnection = QFSgraph.vertices.filter
 //    {
 //      case (id, vp) => true
@@ -110,16 +115,16 @@ object QFS {
 val mostConnection = QFSgraph.vertices.collect
 {
   case (id, vp) if vp._1 == 2 => (id, vp)
-}.coalesce(1)
+}.map(a => (a._1, a._2._2)).coalesce(1)
       .sortBy[Int](
-  _._2._2
+  _._2
   , false
 )
 //    (
 //      (_: VertexId, vd : (Int, Int)) => vd._2 == k
 //
 //    )
-    mostConnection.saveAsTextFile(fs + directory + "output")
+    mostConnection.saveAsTextFile(fs + directory + "output_qfs/")
 
 //      takeOrdered(1)(Ordering[Int].on(
 //      _._2._2
