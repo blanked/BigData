@@ -31,7 +31,7 @@ object LinkPredictionOperator {
 
 
   def main(args: Array[String]) {
-    val conf = new SparkConf().setAppName("LinkPredictionOperator").setMaster("local")
+    val conf = new SparkConf().setAppName("LinkPredictionOperator")
     val spark = SparkSession
       .builder()
       .config(conf)
@@ -59,7 +59,7 @@ object LinkPredictionOperator {
         case _ => println("Undefine predictor")
           throw new IllegalArgumentException("Undefine predictor. \n CN -> Common Neighbors \n JC -> Jaccard Coefficient ")
       }
-      predictedEdges.saveAsTextFile(outPath)
+      predictedEdges.coalesce(1).saveAsTextFile(outPath)
       println("Complete!")
     } else {
       println("args: [predictor] [input] [output] [threshold]")
