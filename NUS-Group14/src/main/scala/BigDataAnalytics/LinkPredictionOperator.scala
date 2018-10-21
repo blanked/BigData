@@ -25,6 +25,7 @@ import ml.sparkling.graph.operators.algorithms.community.pscan.PSCAN
 
 // Added loading parameters
 import ml.sparkling.graph.loaders.csv.GraphFromCsv.LoaderParameters.{Delimiter, NoHeader, Partitions, Quotation}
+//import BigDataAnalytics.JaccardCoefficient
 
 
 object LinkPredictionOperator {
@@ -44,7 +45,8 @@ object LinkPredictionOperator {
       val outPath = args(2)
 
 
-      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).using(Partitions(24)).load()
+//      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).using(Partitions(8)).load()
+      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).load()
       var predictedEdges: RDD[(graphx.VertexId, graphx.VertexId)] = null
       algo match {
         case "JC" =>
