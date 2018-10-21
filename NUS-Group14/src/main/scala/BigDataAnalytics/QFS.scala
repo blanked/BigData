@@ -17,6 +17,8 @@ import ml.sparkling.graph.operators.measures.edge.{AdamicAdar, CommonNeighbours}
 import scala.math.Ordering
 import java.io._
 
+
+import scala.io.Source
 object QFS {
 
   def doQFS(graph:Graph[(Int, Int), Int], root: VertexId) : Graph[(Int, Int), Int] = {
@@ -76,59 +78,56 @@ object QFS {
     println( "Hello World!" )
 
 //    println("concat arguments = " + foo(args))
-    val k = 2
+
     val conf = new SparkConf().setAppName("Test QFS")
     val spark = SparkSession
       .builder()
       .getOrCreate()
 
-//    val fs = "file://"
-//    val directory = "/home/j/BigData/data/"
-
-
-    val fs = "gs://"
-    val directory = "dataproc-753f5751-93fe-4649-89ef-cb7a4c923bc1-asia-southeast1/"
-
-    //        val fileName = "easy_test.csv"
+    val fs = "file://"
+    val directory = "/home/j/BigData/data/"
     val fileName = "twitter_nodate.csv"
-    val rootID: VertexId = 1
-    // create edge RDD of type RDD[(VertexId, VertexId)]
+    //    val fs = "gs://"
+    //    val directory = "dataproc-753f5751-93fe-4649-89ef-cb7a4c923bc1-asia-southeast1/"
+
+    val activeFileName = "active50.csv"
+
+
+    val pathLength = 2
+    val minimumNumPaths = 1
 
     val file = spark.sparkContext.textFile(fs + directory + fileName,24)
     val edgesRDD: RDD[(VertexId, VertexId)] = file.map(line => line.split(","))
       .map(line =>
         (line(0).toInt, line(1).toInt))
 
-    // create a graph
     val graph = Graph.fromEdgeTuples(edgesRDD, (Int.MaxValue, 0))
 
-    val QFSgraph :Graph[(Int, Int), Int]  = doQFS(graph,  rootID)
-    // you can see your graph
-//    println("Original data")
-//    QFSgraph.vertices.collect().foreach(println)
-//    println("New data")
-//    val mostConnection = QFSgraph.vertices.filter
-//    {
-//      case (id, vp) => true
-//      case _ => false
-//    }
-val mostConnection = QFSgraph.vertices.collect
-{
-  case (id, vp) if vp._1 == 2 => (id, vp)
-}.map(a => (a._1, a._2._2)).coalesce(1)
-      .sortBy[Int](
-  _._2
-  , false
-)
-//    (
-//      (_: VertexId, vd : (Int, Int)) => vd._2 == k
-//
-//    )
-    mostConnection.saveAsTextFile(fs + directory + "output_qfs/")
+    for (line <- Source.fromFile(directory + activeFileName).getLines) {
 
-//      takeOrdered(1)(Ordering[Int].on(
-//      _._2._2
-//    ))
+      var rootID: VertexId = line.toInt
+      var QFSgraph :Graph[(Int, Int), Int]  = doQFS(graph,  rootID)
+      var mostConnection = QFSgraph.vertices.collect
+      {
+        case (id, vp) if vp._1 == pathLength => (id, vp)
+      }
+        .map(a => (a._1, a._2._2))
+        .coalesce(1)
+        .sortBy[Int](
+        _._2
+        , false
+      )
+        .filter(
+          a => a._2 >= minimumNumPaths
+        )
+        .map(
+          a => (rootID, a._1)
+        )
+      mostConnection.saveAsTextFile(fs + directory + "output_qfs_" + rootID + "/" )
+
+    }
+
+
 
 
   }
