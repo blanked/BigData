@@ -5,30 +5,20 @@
 
 package BigDataAnalytics
 
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkContext._
+
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
-import ml.sparkling.graph.operators.algorithms.community.pscan.PSCAN
-import ml.sparkling.graph.api.operators.algorithms.community.CommunityDetection.ComponentID
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.graphx
 import ml.sparkling.graph.api.loaders.GraphLoading.LoadGraph
 import ml.sparkling.graph.loaders.csv.GraphFromCsv.CSV
-import org.apache.spark.SparkContext
-import org.apache.spark.graphx.Graph
+
 import ml.sparkling.graph.operators.measures.edge.{AdamicAdar, CommonNeighbours}
 
-import ml.sparkling.graph._
-
-import ml.sparkling.graph.operators.OperatorsDSL
-
-import ml.sparkling.graph.operators.OperatorsDSL._
 import org.apache.spark.graphx.{VertexId, Graph}
 import org.apache.spark.graphx._
 import ml.sparkling.graph.operators.algorithms.link.BasicLinkPredictor
-import ml.sparkling.graph.api.operators.measures.{EdgeMeasure, VertexMeasureConfiguration}
-//import ml.sparkling.graph.api.operators.measures._
+
 
 // Added for partitioning
 import ml.sparkling.graph.operators.partitioning.CommunityBasedPartitioning
