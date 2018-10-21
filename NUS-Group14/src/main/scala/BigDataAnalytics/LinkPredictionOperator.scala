@@ -48,24 +48,32 @@ object LinkPredictionOperator {
       .builder()
       .getOrCreate()
 
-
-/*    val directory = "/Users/liyan/Documents/cs5344/BigData/data/"
-    val fileName = "small_nodate.csv"*/
+    
+//    val directory = "/Users/liyan/Documents/cs5344/BigData/data/"
+//    val fileName = "small_nodate.csv"
     val fs = "file://"
-    val directory = "/home/huijun/Documents/Github/BigData/data/twitter/"
-    val fileName = "twitter.csv"
+    val directory = "/home/huijun/Programming/Github/BigData/data/"
+    var fileName = "first_nodate.csv"
+    if (args.length >= 2) {
+      fileName = args(1)
+    }
+    val filePath =  fs + directory + fileName
+    
+//    val googleDir = "gs://dataproc-b94abca3-ad85-45bf-aa50-b14caeb35d8f-au-southeast1"
+//    val filePath = googleDir + fileName
     
 
-    val filePath =  fs + directory + fileName
+    
 //    implicit sc:SparkContext => spark.sparkContext
     implicit val sc = spark.sparkContext
 //    val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).using(Partitions(50)).load()
     val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
     
-    val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 10, false)
+    
+    val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 5, false)
 
 //    println("Size of RDD: " + predictedEdges.count())
-    predictedEdges.saveAsTextFile(fs + directory + "output")
+    predictedEdges.coalesce(1).saveAsTextFile(fs + directory + "output")
     
 
     println("Complete!")

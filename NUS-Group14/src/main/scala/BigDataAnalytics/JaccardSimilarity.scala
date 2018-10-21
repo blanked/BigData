@@ -16,6 +16,7 @@ object JaccardSimilarity extends EdgeMeasure[Int, NeighbourSet] {
   
   def computeValue(srcAttr:NeighbourSet,dstAttr:NeighbourSet,treatAsUndirected:Boolean=false):Int={
     intersectSize(srcAttr,dstAttr)
+    
   }
 
   override def preprocess[VD:ClassTag,E:ClassTag](graph: Graph[VD, E],treatAsUndirected:Boolean=false): Graph[NeighbourSet, E] = {
