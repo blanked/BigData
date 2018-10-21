@@ -11,11 +11,10 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.graphx
 import ml.sparkling.graph.api.loaders.GraphLoading.LoadGraph
+import ml.sparkling.graph.loaders.csv.CsvLoaderConfig
 import ml.sparkling.graph.loaders.csv.GraphFromCsv.CSV
-
 import ml.sparkling.graph.operators.measures.edge.{AdamicAdar, CommonNeighbours}
-
-import org.apache.spark.graphx.{VertexId, Graph}
+import org.apache.spark.graphx.{Graph, VertexId}
 import org.apache.spark.graphx._
 import ml.sparkling.graph.operators.algorithms.link.BasicLinkPredictor
 
@@ -45,7 +44,7 @@ object LinkPredictionOperator {
       val outPath = args(2)
 
 
-      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(Partitions(24)).load()
+      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).load()
       var predictedEdges: RDD[(graphx.VertexId, graphx.VertexId)] = null
       algo match {
         case "JC" =>
@@ -54,6 +53,9 @@ object LinkPredictionOperator {
         case "CN" =>
           val threshold = args(3).toInt
           predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, threshold, false)
+        case "AA" =>
+          val threshold = args(3).toDouble
+          predictedEdges = BasicLinkPredictor.predictLinks(graph, AdamicAdar, threshold, false)
         case _ => println("Undefine predictor")
           throw new IllegalArgumentException("Undefine predictor. \n CN -> Common Neighbors \n JC -> Jaccard Coefficient ")
       }
