@@ -43,13 +43,17 @@ object LinkPredictionOperator {
       val algo = args(0)
       val filePath = args(1)
       val outPath = args(2)
-      val threshold = args(3).toInt
+
 
       val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
       var predictedEdges: RDD[(graphx.VertexId, graphx.VertexId)] = null
       algo match {
-        case "JC" => predictedEdges = BasicLinkPredictor.predictLinks(graph, JaccardCoefficient, threshold, false)
-        case "CN" => predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, threshold, false)
+        case "JC" =>
+          val threshold = args(3).toDouble
+          predictedEdges = BasicLinkPredictor.predictLinks(graph, JaccardCoefficient, threshold, false)
+        case "CN" =>
+          val threshold = args(3).toInt
+          predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, threshold, false)
         case _ => println("Undefine predictor")
           throw new IllegalArgumentException("Undefine predictor. \n CN -> Common Neighbors \n JC -> Jaccard Coefficient ")
       }

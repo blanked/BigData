@@ -12,15 +12,18 @@ import scala.reflect.ClassTag
 /**
  * Created by Roman Bartusiak (roman.bartusiak@pwr.edu.pl http://riomus.github.io).
  */
-object JaccardCoefficient extends EdgeMeasure[Int,NeighbourSet]{
+object JaccardCoefficient extends EdgeMeasure[Double,NeighbourSet]{
 
-  def computeValue(srcAttr:NeighbourSet,dstAttr:NeighbourSet,treatAsUndirected:Boolean=false):Int={
-    unionSize(srcAttr,dstAttr)
+  def computeValue(srcAttr:NeighbourSet,dstAttr:NeighbourSet,treatAsUndirected:Boolean=false): Double ={
+    intersetSize(srcAttr, dstAttr) / unionSize(srcAttr,dstAttr)
   }
 
 
   def unionSize(neighbours1:JSet[JLong],neighbours2:JSet[JLong]):Int = {
     neighbours1.union(neighbours2).size
+  }
+  def intersetSize(neighbours1:JSet[JLong],neighbours2:JSet[JLong]):Int = {
+    neighbours1.intersect(neighbours2).size
   }
 
 
