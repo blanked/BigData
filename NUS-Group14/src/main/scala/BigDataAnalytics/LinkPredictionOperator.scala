@@ -32,6 +32,9 @@ import ml.sparkling.graph.api.operators.measures.{EdgeMeasure, VertexMeasureConf
 import ml.sparkling.graph.operators.partitioning.CommunityBasedPartitioning
 import ml.sparkling.graph.operators.algorithms.community.pscan.PSCAN
 
+// Added loading parameters
+import ml.sparkling.graph.loaders.csv.GraphFromCsv.LoaderParameters.{Delimiter, NoHeader, Partitions, Quotation}
+
 
 
 object LinkPredictionOperator {
@@ -47,19 +50,20 @@ object LinkPredictionOperator {
 
 /*    val directory = "/Users/liyan/Documents/cs5344/BigData/data/"
     val fileName = "small_nodate.csv"*/
-    val fs = "gs://"
-    val directory = "dataproc-753f5751-93fe-4649-89ef-cb7a4c923bc1-asia-southeast1/"
-    val fileName = "flickr-full.csv"
+    val fs = "file://"
+    val directory = "/home/huijun/Documents/Github/BigData/data/twitter/"
+    val fileName = "twitter.csv"
 
     val filePath =  fs + directory + fileName
 //    implicit sc:SparkContext => spark.sparkContext
     implicit val sc = spark.sparkContext
+//    val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).using(Partitions(50)).load()
     val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
     
     val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 10, false)
 //    val predictedEdges: RDD[(VertexId, VertexId)] = graph.predictLinks(edgeMeasure=CommonNeighbours,threshold=10, treatAsUndirected=false)
-    
-    println("Size of RDD: " + predictedEdges.count())
+
+//    println("Size of RDD: " + predictedEdges.count())
     predictedEdges.saveAsTextFile(fs + directory + "output")
     
 
