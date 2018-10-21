@@ -47,31 +47,27 @@ object LinkPredictionOperator {
       .builder()
       .config(conf)
       .getOrCreate()
-
-    val filePath = args(0)
-    val outPath = args(1)
-    val threshold = args(2).toInt
-/*    val fs = "file:///"
-    val directory = "Users/liyan/Downloads/first/"
-    val fileName = "first.csv" */
-/*    val fs = "gs://"
-  //  val directory = "dataproc-753f5751-93fe-4649-89ef-cb7a4c923bc1-asia-southeast1/"
-  //  val fileName = "flickr-full.csv"*/
-
-  //  val filePath = fs + directory + fileName
-    //    implicit sc:SparkContext => spark.sparkContext
     implicit val sc = spark.sparkContext
 
-    val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
+    if(args.length >= 4) {
+      val algo = args(0)
+      val filePath = args(1)
+      val outPath = args(2)
+      val threshold = args(3).toInt
 
-    val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, threshold, false)
-    //    val predictedEdges: RDD[(VertexId, VertexId)] = graph.predictLinks(edgeMeasure=CommonNeighbours,threshold=10, treatAsUndirected=false)
-
-    //println("Size of RDD: " + predictedEdges.count())
-    predictedEdges.saveAsTextFile(outPath)
-
-
-    println("Complete!")
+      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
+      var predictedEdges: RDD[(graphx.VertexId, graphx.VertexId)] = null
+      algo match {
+        case "JC" => predictedEdges = BasicLinkPredictor.predictLinks(graph, JaccardCoefficient, threshold, false)
+        case "CN" => predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, threshold, false)
+        case _ => println("Undefine predictor")
+          throw new IllegalArgumentException("Undefine predictor. \n CN -> Common Neighbors \n JC -> Jaccard Coefficient ")
+      }
+      predictedEdges.saveAsTextFile(outPath)
+      println("Complete!")
+    } else {
+      println("args: [predictor] [input] [output] [threshold]")
+    }
 
   }
 

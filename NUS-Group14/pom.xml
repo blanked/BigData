@@ -23,12 +23,24 @@
     <spec2.version>4.2.0</spec2.version>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/ml.sparkling/sparkling-graph-operators -->
+        <dependency>
+            <groupId>ml.sparkling</groupId>
+            <artifactId>sparkling-graph-operators_2.11</artifactId>
+            <version>0.0.7</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/ml.sparkling/sparkling-graph-loaders -->
+        <dependency>
+            <groupId>ml.sparkling</groupId>
+            <artifactId>sparkling-graph-loaders_2.11</artifactId>
+            <version>0.0.7</version>
+        </dependency>
 
   <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-graphx -->
 
