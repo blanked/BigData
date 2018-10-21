@@ -34,6 +34,9 @@ import ml.sparkling.graph.api.operators.measures.{EdgeMeasure, VertexMeasureConf
 import ml.sparkling.graph.operators.partitioning.CommunityBasedPartitioning
 import ml.sparkling.graph.operators.algorithms.community.pscan.PSCAN
 
+// Added loading parameters
+import ml.sparkling.graph.loaders.csv.GraphFromCsv.LoaderParameters.{Delimiter, NoHeader, Partitions, Quotation}
+
 
 object LinkPredictionOperator {
 
@@ -58,10 +61,8 @@ object LinkPredictionOperator {
   //  val filePath = fs + directory + fileName
     //    implicit sc:SparkContext => spark.sparkContext
     implicit val sc = spark.sparkContext
-    val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
 
-    val components: Graph[ComponentID, String] = PSCAN.computeConnectedComponents(graph)
-    components.saveAsTextFile(outPath)
+    val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
 
     val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, threshold, false)
     //    val predictedEdges: RDD[(VertexId, VertexId)] = graph.predictLinks(edgeMeasure=CommonNeighbours,threshold=10, treatAsUndirected=false)

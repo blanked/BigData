@@ -2,9 +2,11 @@
 target/*
 *.iml
 project/*
-data/*
 NUS-Group14/.settings/*
 /data/flickr-growth.txt.gz
 /data/flickr-full.csv
 /data/flickr-growth-sorted.txt
 /data/flickr*
+/data/old/*
+/data/old
+/data/output
