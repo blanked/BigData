@@ -25,6 +25,7 @@ import ml.sparkling.graph.operators.algorithms.community.pscan.PSCAN
 
 // Added loading parameters
 import ml.sparkling.graph.loaders.csv.GraphFromCsv.LoaderParameters.{Delimiter, NoHeader, Partitions, Quotation}
+//import BigDataAnalytics.JaccardCoefficient
 
 
 object LinkPredictionOperator {
@@ -36,36 +37,6 @@ object LinkPredictionOperator {
       .builder()
       .config(conf)
       .getOrCreate()
-<<<<<<< HEAD
-
-    
-//    val directory = "/Users/liyan/Documents/cs5344/BigData/data/"
-//    val fileName = "small_nodate.csv"
-    val fs = "file://"
-    val directory = "/home/huijun/Programming/Github/BigData/data/"
-    var fileName = "first_nodate.csv"
-    if (args.length >= 2) {
-      fileName = args(1)
-    }
-    val filePath =  fs + directory + fileName
-    
-//    val googleDir = "gs://dataproc-b94abca3-ad85-45bf-aa50-b14caeb35d8f-au-southeast1"
-//    val filePath = googleDir + fileName
-    
-
-    
-//    implicit sc:SparkContext => spark.sparkContext
-    implicit val sc = spark.sparkContext
-//    val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).using(Partitions(50)).load()
-    val graph:Graph[String, String] = LoadGraph.from(CSV(filePath)).load()
-    
-    
-    val predictedEdges = BasicLinkPredictor.predictLinks(graph, CommonNeighbours, 5, false)
-
-//    println("Size of RDD: " + predictedEdges.count())
-    predictedEdges.coalesce(1).saveAsTextFile(fs + directory + "output")
-    
-
     implicit val sc = spark.sparkContext
 
     if(args.length >= 4) {
@@ -74,7 +45,11 @@ object LinkPredictionOperator {
       val outPath = args(2)
 
 
-      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).using(Partitions(24)).load()
+<<<<<<< HEAD
+//      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).using(Partitions(8)).load()
+=======
+>>>>>>> a3192650308e0458a06efb21cd02756ba8239a27
+      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).load()
       var predictedEdges: RDD[(graphx.VertexId, graphx.VertexId)] = null
       algo match {
         case "JC" =>
@@ -94,7 +69,6 @@ object LinkPredictionOperator {
     } else {
       println("args: [predictor] [input] [output] [threshold]")
     }
-
 
   }
 
