@@ -11,3 +11,7 @@ NUS-Group14/.settings/*
 /data/old
 /data/output
 /result/.ipynb_checkpoints
+/NUS-Group14/.tmpBin/
+/NUS-Group14/.cache-main
+/NUS-Group14/cache-main
+/output*

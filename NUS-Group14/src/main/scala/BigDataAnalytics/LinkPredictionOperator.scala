@@ -45,8 +45,8 @@ object LinkPredictionOperator {
       val outPath = args(2)
 
 
-//      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).using(Partitions(8)).load()
-      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).load()
+      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).using(Partitions(8)).load()
+//      val graph: Graph[String, String] = LoadGraph.from(CSV(filePath)).using(NoHeader).load()
       var predictedEdges: RDD[(graphx.VertexId, graphx.VertexId)] = null
       algo match {
         case "JC" =>
