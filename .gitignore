@@ -13,5 +13,6 @@ NUS-Group14/.settings/*
 /result/.ipynb_checkpoints
 /NUS-Group14/.tmpBin/
 /NUS-Group14/.cache-main
-/NUS-Group14/cache-main
 /output*
+/result/fb_result*
+/result/facebook_results/fb_cn3

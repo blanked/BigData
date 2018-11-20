@@ -37,6 +37,7 @@ object LinkPredictionOperator {
       .builder()
       .config(conf)
       .getOrCreate()
+      
     implicit val sc = spark.sparkContext
 
     if(args.length >= 4) {

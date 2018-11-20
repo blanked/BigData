@@ -1,0 +1,1 @@
+spark-submit --master local --driver-memory 15g --class BigDataAnalytics.LinkPredictionOperator target/NUS-Group14-1.0.jar CN "../data/fb_data/fb_big_edges_cleaned_sample" "../result/fb_result_cn(3)" 3
